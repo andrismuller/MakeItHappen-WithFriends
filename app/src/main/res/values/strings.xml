@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Make It Happen - With Friends</string>
+    //facebook
+    <string name="facebook_app_id">853827461442714</string>
+    <string name="fb_login_protocol_scheme">fb853827461442714</string>
+
+    <string name="status">Státusz</string>
+    <string name="login_success">Sikeres bejelentkezés!</string>
+    <string name="new_line">\\n</string>
+    <string name="greetings">Üdvözlöm</string>
+    <string name="login_canceled">Bejelentkezés megszakítva!</string>
+    <string name="login_error">Hiba történt!</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="action_weather">Időjárás</string>
+
+</resources>
