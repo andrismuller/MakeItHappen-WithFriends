@@ -12,5 +12,57 @@
     <string name="login_error">Hiba történt!</string>
     <string name="action_settings">Beállítások</string>
     <string name="action_weather">Időjárás</string>
+    <string name="user">Üdvözlöm Felhasználó!</string>
+    <string name="welcome">Üdvözlöm</string>
+    <string name="action_send_email">E-mail küldése</string>
+    <string name="action_tips">Tippek</string>
 
+    <string name="useful_tips_for_todos">
+        Néhány hasznos tanács Todo lista használatához.\n
+        1. Komplex feladatokat célszerű kis feladatokra osztani.\n
+        2. Minden szükséges információt tüntess fel, ami szükséges a feladat elvégzéséhez.\n
+        3. Érdemes különválasztani a személyes, munkahelyi és egyéb feladatokat.\n
+        4. Legyen a feladatoknak prioritása (sürgősség, fontosság).\n
+        5. Ha lehet, a lista legyen rövid (20-nál több ne legyen).\n
+        6. Fókuszálj a jelenre! Ami időben messze van, annak helye a naptárban van.\n
+        Több információ (angol): http://lifehacker.com/5954123/back-to-basics-how-to-simplify-your-to-do-list-and-make-it-useful-again\n
+    </string>
+    <string name="tips_fragment_title">Tippek</string>
+
+    <string name="action_add_todo">Todo létrehozása</string>
+    <string name="main_page_title">Fontos</string>
+    <string name="error">Hiba</string>
+    <string name="alarm_page_title">Emlékeztető</string>
+    <string name="set_alarm">Emlékeztető beállítása</string>
+    <string name="alarm_note_hint">Megjegyzés</string>
+    <string name="alarm_set">Emlékeztető beállítva</string>
+    <string name="cancel">Mégsem</string>
+    <string name="new_todo">Todo létrehozása</string>
+    <string name="newtodo_title">Todo cím</string>
+    <string name="newtodo_required">Szükséges információk</string>
+    <string name="newtodo_description">Részletek</string>
+    <string name="todo_page_title">Teendők</string>
+    <string name="place">Város</string>
+    <string name="temperature">Hőmérséklet</string>
+    <string name="next_day_weather">Holnapi időjárás</string>
+
+    <string-array name="newtodo_priority_array">
+        <item>Alacsony</item>
+        <item>Közepes</item>
+        <item>Magas</item>
+    </string-array>
+
+    <string-array name="newtodo_category_array">
+        <item>Személyes</item>
+        <item>Munka</item>
+    </string-array>
+
+    <string-array name="repeattype_array">
+        <item>Nincs</item>
+        <item>Napi</item>
+        <item>Heti</item>
+        <item>Havi</item>
+        <item>Hétköznap</item>
+        <item>Hétvégén</item>
+    </string-array>
 </resources>

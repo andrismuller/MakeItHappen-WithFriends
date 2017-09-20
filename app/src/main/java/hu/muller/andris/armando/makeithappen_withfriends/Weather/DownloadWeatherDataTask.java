@@ -10,17 +10,28 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.DoubleBuffer;
+import java.util.HashMap;
 
 /**
  * Created by Muller Andras on 9/11/2017.
  */
 
 public class DownloadWeatherDataTask extends AsyncTask<String,Void,String> {
-    String result = "";
-    URL url;
-    HttpURLConnection urlConnection = null;
-    Double temperature = null;
-    String placeName = null;
+    private String result = "";
+    private URL url;
+    private HttpURLConnection urlConnection = null;
+    private Double temperature = null;
+    private String placeName = null;
+
+    private OnWeatherDataArrivedListener onWeatherDataArrivedListener;
+
+    public interface OnWeatherDataArrivedListener{
+        void onWeatherDataArrived(HashMap<String,String> data);
+    }
+
+    public DownloadWeatherDataTask(OnWeatherDataArrivedListener weatherDataArrivedListener){
+        this.onWeatherDataArrivedListener = weatherDataArrivedListener;
+    }
 
     @Override
     protected String doInBackground(String... urls) {
@@ -58,8 +69,10 @@ public class DownloadWeatherDataTask extends AsyncTask<String,Void,String> {
             temperature = changeKelvinToCelsius(Double.parseDouble(weatherData.getString("temp")));
             placeName = jsonObject.getString("name");
 
-            WheaterFragment.tempTextView.setText(temperature.toString());
-            WheaterFragment.cityTextView.setText(placeName);
+            HashMap<String, String> hmWeatherData = new HashMap<>();
+            hmWeatherData.put("temperature", temperature.toString());
+            hmWeatherData.put("place", placeName);
+            onWeatherDataArrivedListener.onWeatherDataArrived(hmWeatherData);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,9 +80,8 @@ public class DownloadWeatherDataTask extends AsyncTask<String,Void,String> {
 
     }
 
-    public double changeKelvinToCelsius(double kelvin){
-        double celsius = kelvin - 273.15;
-        return celsius;
+    private double changeKelvinToCelsius(double kelvin){
+        return kelvin - 273.15;
     }
 
 }

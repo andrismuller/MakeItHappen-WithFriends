@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment"
+    android:orientation="vertical"
+    android:id="@+id/fragment_alarm">
+
+    <ListView
+        android:id="@+id/alarm_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/alarm_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin" />
+
+</FrameLayout>

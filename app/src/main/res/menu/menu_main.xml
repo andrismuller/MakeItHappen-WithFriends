@@ -10,4 +10,17 @@
         android:title="@string/action_weather"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/action_send_email"
+        android:title="@string/action_send_email"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_add_todo"
+        android:title="@string/action_add_todo"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_add"></item>
+
+    <item android:id="@+id/action_tips"
+        android:title="@string/action_tips"
+        app:showAsAction="never"/>
+
 </menu>

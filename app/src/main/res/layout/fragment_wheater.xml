@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:id="@+id/city_textView"
+        android:id="@+id/place_textView"
         android:layout_weight="1"
-        android:text="city"
+        android:text="@string/place"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     <TextView
@@ -29,7 +29,7 @@
         android:textAlignment="center"
         android:id="@+id/temp_textView"
         android:layout_weight="1"
-        android:text="temp"
+        android:text="@string/temperature"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
 </LinearLayout>
