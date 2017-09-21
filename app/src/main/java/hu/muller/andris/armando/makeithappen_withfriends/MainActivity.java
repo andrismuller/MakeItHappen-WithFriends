@@ -20,6 +20,7 @@ import com.facebook.appevents.AppEventsLogger;
 
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.AlarmFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment;
+import hu.muller.andris.armando.makeithappen_withfriends.Note.NoteFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.NewTodoDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.TodoFragment;
 
@@ -139,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
                 case 2:
                     return TodoFragment.newInstance();
 
+                case 3:
+                    return NoteFragment.newInstance();
+
                 default:
                     return MainFragment.newInstance();
             }
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -158,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
                     return getString(R.string.alarm_page_title);
                 case 2:
                     return getString(R.string.todo_page_title);
+                case 3:
+                    return getString(R.string.note_fragment_title);
             }
 
             return Resources.getSystem().getString(R.string.error);

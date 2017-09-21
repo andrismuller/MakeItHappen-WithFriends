@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.muller.andris.armando.makeithappen_withfriends.model.Alarm;
+import hu.muller.andris.armando.makeithappen_withfriends.model.Note;
 import hu.muller.andris.armando.makeithappen_withfriends.model.Todo;
 
 /**
@@ -39,6 +40,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TODOS_COLUMN_CATEGORY = "category";
     private static final String TODOS_COLUMN_IS_DONE = "is_done";
 
+    private static final String TABLE_NOTES = "notes";
+    private static final String NOTES_COLUMN_NOTE = "note";
+    private static final String NOTES_COLUMN_TIME_CREATED = "time_created";
 
     private static final String CREATE_ALARMS_TABLE =
             "create table " + TABLE_ALARMS +
@@ -57,20 +61,27 @@ public class DBHelper extends SQLiteOpenHelper {
                     TODOS_COLUMN_IS_DONE + " integer, " +
                     TODOS_COLUMN_ALARM_ID + " integer" +")";
 
+    private static final String CREATE_NOTES_TABLE =
+            "create table " + TABLE_NOTES +
+                    "(" + NOTES_COLUMN_NOTE + " text, " +
+                    NOTES_COLUMN_TIME_CREATED + " integer " + ")";
+
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 2);
+        super(context, DATABASE_NAME, null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_ALARMS_TABLE);
         sqLiteDatabase.execSQL(CREATE_TODOS_TABLE);
+        sqLiteDatabase.execSQL(CREATE_NOTES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ALARMS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TODOS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
         onCreate(sqLiteDatabase);
     }
 
@@ -279,5 +290,93 @@ public long createTodo(Todo todo) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TODOS, ROWID + " = ?",
                 new String[] { String.valueOf(todoID) });
+    }
+
+/**************     NOTES        ****************************************************************************************/
+
+
+    public long createNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(NOTES_COLUMN_NOTE, note.getNote());
+        values.put(NOTES_COLUMN_TIME_CREATED, note.getTimeCreated());
+
+        return db.insert(TABLE_NOTES, null, values);
+    }
+
+    public Note getNote(long note_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_NOTES + " WHERE " +
+                ROWID + " = " + note_id;
+
+        Log.e(TAG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Note note = new Note();
+        note.setId(note_id);
+        note.setNote((c.getString(c.getColumnIndex(NOTES_COLUMN_NOTE))));
+        note.setTimeCreated(c.getLong(c.getColumnIndex(NOTES_COLUMN_TIME_CREATED)));
+
+        return note;
+    }
+
+    public List<Note> getAllNote() {
+        List<Note> notes = new ArrayList<>();
+        String selectQuery = "SELECT "+ ROWID + "," +
+                NOTES_COLUMN_TIME_CREATED + "," +
+                NOTES_COLUMN_NOTE +
+                " FROM " + TABLE_NOTES;
+
+        Log.e(TAG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Note note = new Note();
+                note.setId(c.getLong((c.getColumnIndex(ROWID))));
+                note.setNote((c.getString(c.getColumnIndex(NOTES_COLUMN_NOTE))));
+                note.setTimeCreated(c.getLong(c.getColumnIndex(NOTES_COLUMN_TIME_CREATED)));
+
+                notes.add(note);
+            } while (c.moveToNext());
+        }
+
+        return notes;
+    }
+
+    public int getNoteCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_NOTES;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        int count = cursor.getCount();
+        cursor.close();
+
+        return count;
+    }
+
+    public int updateNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(NOTES_COLUMN_NOTE, note.getNote());
+        values.put(NOTES_COLUMN_TIME_CREATED, note.getTimeCreated());
+
+        return db.update(TABLE_NOTES, values, ROWID + " = ?",
+                new String[] { String.valueOf(note.getId()) });
+    }
+
+    public void deleteNote(long noteID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NOTES, ROWID + " = ?",
+                new String[] { String.valueOf(noteID) });
     }
 }
