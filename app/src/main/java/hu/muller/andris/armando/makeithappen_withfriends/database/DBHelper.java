@@ -18,6 +18,8 @@ import hu.muller.andris.armando.makeithappen_withfriends.model.Todo;
  * Created by Muller Andras on 9/18/2017.
  */
 
+
+/// SugarORM, Firebase
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "SQLiteOpenHelper";
 

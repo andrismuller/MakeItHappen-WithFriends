@@ -34,8 +34,14 @@ public class AlarmsListAdapter extends BaseAdapter {
     public AlarmsListAdapter(Context applicationContext) {
         this.context = applicationContext;
         layoutInflater = (LayoutInflater.from(applicationContext));
-        DBHelper dbHelper = new DBHelper(context);
-        alarms = dbHelper.getAllAlarm();
+//        for (int i = 0; i < alarms.size(); ++i){
+//            alarms.get(i).delete();
+//        }
+        try {
+            alarms = Alarm.listAll(Alarm.class);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -66,8 +72,7 @@ public class AlarmsListAdapter extends BaseAdapter {
         deleteImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBHelper dbHelper = new DBHelper(context);
-                dbHelper.deleteAlarm(alarms.get(i).getId());
+                alarms.get(i).delete();
 
                 alarms.remove(i);
                 notifyDataSetChanged();
@@ -89,8 +94,7 @@ public class AlarmsListAdapter extends BaseAdapter {
     }
 
     public void onAlarmAdded(){
-        DBHelper dbHelper = new DBHelper(context);
-        alarms = dbHelper.getAllAlarm();
+        alarms = Alarm.listAll(Alarm.class);
         notifyDataSetChanged();
     }
 }

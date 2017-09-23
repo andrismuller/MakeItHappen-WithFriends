@@ -63,9 +63,7 @@ public class NewTodoDialogFragment extends DialogFragment {
                                 todo.setDone(false);
                                 todo.setCreatedDate(System.currentTimeMillis());
                                 todo.setAlarm_id(0);
-
-                                DBHelper db = new DBHelper(getActivity());
-                                todo.setId(db.createTodo(todo));
+                                todo.setMyId(todo.save());
 
                                 dialog.dismiss();
 

@@ -34,8 +34,14 @@ public class TodoListAdapter extends BaseAdapter{
     public TodoListAdapter(Context applicationContext) {
         this.context = applicationContext;
         layoutInflater = (LayoutInflater.from(applicationContext));
-        DBHelper dbHelper = new DBHelper(context);
-        todos = dbHelper.getAllTodo();
+//        for (int i = 0; i < todos.size(); ++i){
+//            todos.get(i).delete();
+//        }
+        try {
+            todos = Todo.listAll(Todo.class);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
     
     @Override
@@ -71,8 +77,10 @@ public class TodoListAdapter extends BaseAdapter{
         deleteImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBHelper dbHelper = new DBHelper(context);
-                dbHelper.deleteTodo(todos.get(i).getId());
+//                DBHelper dbHelper = new DBHelper(context);
+//                dbHelper.deleteTodo(todos.get(i).getId());
+//                Todo todo = Todo.findById(Todo.class, todos.get(i).getMyId());
+                todos.get(i).delete();
 
                 todos.remove(i);
                 notifyDataSetChanged();
@@ -84,8 +92,7 @@ public class TodoListAdapter extends BaseAdapter{
     }
 
     public void onTodoAdded(){
-        DBHelper dbHelper = new DBHelper(context);
-        todos = dbHelper.getAllTodo();
+        todos = Todo.listAll(Todo.class);
         notifyDataSetChanged();
     }
 }

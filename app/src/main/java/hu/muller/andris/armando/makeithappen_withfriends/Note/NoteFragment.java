@@ -52,9 +52,8 @@ public class NoteFragment extends Fragment {
                 Note note = new Note();
                 note.setNote(newNoteET.getText().toString());
                 note.setTimeCreated(System.currentTimeMillis());
-
-                DBHelper dbHelper = new DBHelper(getContext());
-                note.setId(dbHelper.createNote(note));
+                long id = note.save();
+                note.setMyId(id);
                 adapter.addNote(note);
 
                 newNoteET.setText("");

@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +26,7 @@ import hu.muller.andris.armando.makeithappen_withfriends.model.Note;
 
 public class NoteListAdapter extends BaseAdapter{
 
-    private List<Note> notes;
+    private List<Note> notes = new ArrayList<>();
     private Context context;
     private LayoutInflater inflater;
 
@@ -36,8 +37,14 @@ public class NoteListAdapter extends BaseAdapter{
     public NoteListAdapter(Context context){
         this.context = context;
         inflater = (LayoutInflater.from(context));
-        DBHelper dbHelper = new DBHelper(context);
-        notes = dbHelper.getAllNote();
+//        for (int i = 0; i < notes.size(); ++i){
+//            notes.get(i).delete();
+//        }
+        try{
+            notes = Note.listAll(Note.class);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -68,8 +75,8 @@ public class NoteListAdapter extends BaseAdapter{
         deleteNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBHelper dbHelper = new DBHelper(context);
-                dbHelper.deleteNote(notes.get(i).getId());
+//                Note note = Note.findById(Note.class, notes.get(i).getMyId());
+                notes.get(i).delete();
 
                 notes.remove(i);
                 notifyDataSetChanged();

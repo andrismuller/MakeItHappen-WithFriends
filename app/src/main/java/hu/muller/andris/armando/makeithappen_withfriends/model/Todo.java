@@ -1,11 +1,13 @@
 package hu.muller.andris.armando.makeithappen_withfriends.model;
 
+import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
+
 /**
  * Created by Muller Andras on 9/16/2017.
  */
 
-public class Todo {
-    private long Id;
+public class Todo extends SugarRecord {
     private String title;
     private String priority;
     private long createdDate;
@@ -14,6 +16,17 @@ public class Todo {
     private String requiredInformation;
     private boolean isDone;
     private String todoCategory;
+    @Ignore
+    private long myId;
+
+
+    public long getMyId() {
+        return myId;
+    }
+
+    public void setMyId(long myId) {
+        this.myId = myId;
+    }
 
     public Todo(){
     }
@@ -94,12 +107,12 @@ public class Todo {
     }
 
 
-    public long getId() {
-        return Id;
-    }
+//    public long getId() {
+//        return Id;
+//    }
 
-    public void setId(long id) {
-        Id = id;
-    }
+//    public void setId(long id) {
+//        Id = id;
+////    }
 
 }

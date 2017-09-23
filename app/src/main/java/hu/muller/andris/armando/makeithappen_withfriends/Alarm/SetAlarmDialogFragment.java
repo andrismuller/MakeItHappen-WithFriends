@@ -86,9 +86,8 @@ public class SetAlarmDialogFragment extends DialogFragment {
                                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                                 calendar.set(Calendar.MINUTE, minute);
 
-                                Alarm alarm = new Alarm(note, calendar.getTimeInMillis(), 0, "Nincs");
-                                DBHelper db = new DBHelper(getActivity());
-                                alarm.setId(db.createAlarm(alarm));
+                                Alarm alarm = new Alarm(note, calendar.getTimeInMillis(), "Nincs");
+                                alarm.setMyId(alarm.save());
 
                                 Intent myIntent = new Intent(getActivity(), AlarmReceiver.class);
                                 PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), 0, myIntent, 0);

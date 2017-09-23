@@ -6,6 +6,7 @@
     <uses-permission android:name="com.android.alarm_id.permission.SET_ALARM" />
 
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -49,6 +50,18 @@
             android:enabled="true"
             android:exported="true" />
 
+        <meta-data
+            android:name="DATABASE"
+            android:value="MakeItHappenSugar.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="6" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="hu.muller.andris.armando.makeithappen_withfriends" />
     </application>
 
 </manifest>

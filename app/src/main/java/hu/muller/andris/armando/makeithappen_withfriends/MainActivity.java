@@ -20,6 +20,7 @@ import com.facebook.appevents.AppEventsLogger;
 
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.AlarmFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment;
+import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Note.NoteFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.NewTodoDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.TodoFragment;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -143,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
                 case 3:
                     return NoteFragment.newInstance();
 
+                case 4:
+                    return ControllingFragment.newInstance();
+
                 default:
                     return MainFragment.newInstance();
             }
@@ -150,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -164,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
                     return getString(R.string.todo_page_title);
                 case 3:
                     return getString(R.string.note_fragment_title);
+                case 4:
+                    return getString(R.string.controlling_page_title);
             }
 
             return Resources.getSystem().getString(R.string.error);

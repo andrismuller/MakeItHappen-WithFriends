@@ -1,21 +1,24 @@
 package hu.muller.andris.armando.makeithappen_withfriends.model;
 
+import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
+
 /**
  * Created by Muller Andras on 9/18/2017.
  */
 
-public class Alarm {
+public class Alarm extends SugarRecord {
     private String note;
     private long time;
-    private long id;
+    @Ignore
+    private long myId;
     private String repeatType;
 
     public Alarm(){}
 
-    public Alarm(String note, long time, long id, String repeatType){
+    public Alarm(String note, long time, String repeatType){
         this.note = note;
         this.time = time;
-        this.id = id;
         this.repeatType = repeatType;
     }
 
@@ -36,12 +39,12 @@ public class Alarm {
         this.time = time;
     }
 
-    public long getId() {
-        return id;
+    public long getMyId() {
+        return myId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setMyId(long myId) {
+        this.myId = myId;
     }
 
     public String getRepeatType() {

@@ -66,8 +66,44 @@
         <item>Hétvégén</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_note">Új jegyzet</string>
     <string name="note_fragment_title">Jegyzetek</string>
+    <string name="block_networking">Internethozzáférés kikapcsolása</string>
+    <string name="block_all_apps">Összes alkalmazás blokkolása</string>
+    <string name="template">Sablonok:</string>
+    <string name="current_controls_set">Jelenlegi korlátozások:</string>
+    <string name="controllings">Korlátok:</string>
+    <string name="controlling_page_title">Korlátok</string>
+
+    <string-array name="limit_array">
+        <item>Sablon</item>
+        <item>Internet</item>
+        <item>Weboldal</item>
+        <item>Alkalmazás</item>
+    </string-array>
+
+    <string name="controlling_duration">Időtartam</string>
+    <string name="url">URL:</string>
+    <string name="title">Cím:</string>
+    <string name="start">Kezdet:</string>
+    <string name="date">Dátum:</string>
+    <string name="app">Alkalmazás:</string>
+    <string name="net">Internet:</string>
+    <string name="add_controlling">Új limit felvétele</string>
+    <string name="active">Aktivált</string>
+    <string name="startNow">Kezdés most!</string>
+    <string name="duration">Időtartam:</string>
+    <string name="disabled">Tiltva</string>
+    <string name="enabled">Engedélyezve</string>
+
+    <string-array name="template_array">
+        <item>Nincs sablon</item>
+    </string-array>
+
+    <string-array name="unit_array">
+        <item>perc</item>
+        <item>óra</item>
+        <item>nap</item>
+    </string-array>
+
 </resources>
