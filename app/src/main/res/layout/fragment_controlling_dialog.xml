@@ -1,16 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingDialogFragment"
     android:orientation="vertical"
-    android:weightSum="18">
+    android:weightSum="14">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:id="@+id/new_item_1"
+        android:layout_alignParentTop="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,14 +20,16 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/controlling_title_edittext"/>
+            android:id="@+id/controlling_title_edittext"
+            android:minWidth="100dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:id="@+id/new_item_2"
+        android:layout_below="@id/new_item_1">
         <TextView
             android:id="@+id/controlling_duration_textview"
             android:layout_width="wrap_content"
@@ -47,7 +50,8 @@
             android:layout_height="wrap_content"
             android:minHeight="18dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:hint="1.0"/>
 
         <ImageButton
             android:id="@+id/increment_duration_button"
@@ -58,76 +62,61 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/duration_type_spinner"></Spinner>
+            android:id="@+id/duration_unit_spinner"
+            android:entries="@array/time_unit_array"></Spinner>
     </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_time_button"
+        android:text="@string/select_time"
+        android:layout_below="@id/new_item_2"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:id="@+id/new_item_5"
+        android:layout_below="@id/select_time_button"
+        android:weightSum="10">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start"/>
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/start_hour_spinner"></Spinner>
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/start_minute_spinner"></Spinner>
-    </LinearLayout>
+            android:text="@string/url"
+            android:layout_weight="2"/>
+        <!--<EditText-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/url_edittext"-->
+            <!--android:hint="http://facebook.com"/>-->
+        <!--<Spinner-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/controlling_url_spinner"></Spinner>-->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-        <TextView
+        <AutoCompleteTextView
+            android:id="@+id/url_autotextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date"/>
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/date_year_spinner"></Spinner>
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/date_month_spinner"></Spinner>
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/date_day_spinner"></Spinner>
-    </LinearLayout>
+            android:layout_weight="6"
+            android:dropDownWidth="match_parent"
+            android:minWidth="200dp"></AutoCompleteTextView>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/url"/>
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/controlling_url_spinner"></Spinner>
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_url_button"
-            android:src="@drawable/ic_add_circle_black_18dp"/>
+            android:src="@drawable/ic_add_circle_black_18dp"
+            android:layout_weight="2"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:id="@+id/new_item_6"
+        android:layout_below="@id/new_item_5">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,18 +125,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/controlling_app_spinner"></Spinner>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_app_button"
-            android:src="@drawable/ic_add_circle_black_18dp"/>
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/add_app_button"-->
+            <!--android:src="@drawable/ic_add_circle_black_18dp"/>-->
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:id="@+id/new_item_7"
+        android:layout_below="@id/new_item_6">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,25 +145,20 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/new_controlling_checkbox"/>
+            android:id="@+id/internet_checkbox"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="10">
+        android:id="@+id/new_item_8"
+        android:layout_below="@id/new_item_7">
+
         <ListView
+            android:id="@+id/new_controlling_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/new_controlling_listview"></ListView>
+            android:layout_height="wrap_content"></ListView>
     </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_controlling"
-        android:id="@+id/add_controlling_button"
-        android:layout_weight="1"/>
-
-</LinearLayout>
+</RelativeLayout>

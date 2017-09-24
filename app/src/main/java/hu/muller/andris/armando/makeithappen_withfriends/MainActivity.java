@@ -20,14 +20,20 @@ import com.facebook.appevents.AppEventsLogger;
 
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.AlarmFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment;
+import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Note.NoteFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.NewTodoDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.TodoFragment;
+import hu.muller.andris.armando.makeithappen_withfriends.model.Controlling;
 
 public class MainActivity extends AppCompatActivity implements AlarmFragment.OnNewAlarmListener,
         SetAlarmDialogFragment.OnAlarmAddedListener,
-        TodoFragment.OnNewTodoListener, NewTodoDialogFragment.OnTodoAddedListener{
+        TodoFragment.OnNewTodoListener, NewTodoDialogFragment.OnTodoAddedListener
+//      ,TimePickerDialogFragment.OnTimePicked
+        , ControllingFragment.OnNewControllingListener
+        , ControllingDialogFragment.OnControllingAdded
+    {
 
     private SectionPagerAdapter mSectionPagerAdapter;
     private ViewPager mViewPager;
@@ -121,9 +127,31 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
         }
     }
 
-    private class SectionPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void onNewControlling() {
+        ControllingDialogFragment controllingDialogFragment = ControllingDialogFragment.newInstance();
+        controllingDialogFragment.show(getSupportFragmentManager(), getString(R.string.add_controlling));
+    }
 
-//        private Observable mObservers = new FragmentObserver();
+    @Override
+    public void onControllingAdded(Controlling controlling) {
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+        if (page instanceof ControllingFragment){
+            ControllingFragment fragment = (ControllingFragment) page;
+            fragment.update(controlling);
+        }
+    }
+
+//    @Override
+//    public void onTimePicked(long time) {
+//        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+//        if (page instanceof TodoFragment){
+//            TodoFragment todoFragment = (TodoFragment) page;
+//            todoFragment.update();
+//        }
+//    }
+
+    private class SectionPagerAdapter extends FragmentPagerAdapter {
 
         public SectionPagerAdapter(FragmentManager fm) {
             super(fm);

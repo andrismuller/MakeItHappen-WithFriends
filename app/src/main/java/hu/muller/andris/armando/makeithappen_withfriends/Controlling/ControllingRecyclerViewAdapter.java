@@ -32,6 +32,11 @@ public class ControllingRecyclerViewAdapter extends RecyclerView.Adapter<Control
         this.context = context;
     }
 
+    public void onControllingAdded(Controlling controlling) {
+        controllings.add(controlling);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "ControllingRV.ViewHolder";
         TextView nameTextView;
@@ -88,10 +93,10 @@ public class ControllingRecyclerViewAdapter extends RecyclerView.Adapter<Control
         holder.activateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.startNowButton.getText().toString().equals("activated")){
-                    holder.startNowButton.setText("not activated");
+                if (holder.activateButton.getText().toString().equals("activated")){
+                    holder.activateButton.setText("not activated");
                 } else {
-                    holder.startNowButton.setText("activated");
+                    holder.activateButton.setText("activated");
                 }
                 Toast.makeText(context, "activate clicked", Toast.LENGTH_LONG);
             }

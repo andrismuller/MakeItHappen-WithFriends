@@ -12,13 +12,24 @@ public class Controlling extends SugarRecord {
     private String[] urls;
     private String[] apps;
     private boolean internet;
-    private int durationValue;
+    private double durationValue;
     private String durationUnit;
     private long startTime;
     private boolean activated;
     @Ignore
     private long myId;
 
+    public Controlling(){}
+    public Controlling(String name, String[] urls, String[] apps, boolean internet, double durationValue, String durationUnit, long startTime){
+        this.name = name;
+        this.urls = urls;
+        this.apps = apps;
+        this.internet = internet;
+        this.durationValue = durationValue;
+        this.durationUnit = durationUnit;
+        this.startTime = startTime;
+        this.activated = false;
+    }
 
     public long getMyId() {
         return myId;
@@ -60,7 +71,7 @@ public class Controlling extends SugarRecord {
         this.internet = internet;
     }
 
-    public int getDurationValue() {
+    public double getDurationValue() {
         return durationValue;
     }
 
