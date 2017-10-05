@@ -48,22 +48,20 @@ public class ControllingDialogFragment extends DialogFragment {
     private ImageButton plusButton;
     private Spinner durationUnitSpinner;
     private Button selectTimeButton;
-//    private EditText urlEditText;
-//    private Spinner existingUrlSpinner;
     private AutoCompleteTextView urlTextView;
     private ImageButton addUrlButton;
     private Spinner appSpinner;
-//    private ImageButton addAppButton;
     private CheckBox internetCheckBox;
     private ListView alreadyAddedListView;
 
     ArrayAdapter<String> alreadyAddedAdapter;
     ArrayList<String> alreadyAddedList = new ArrayList<>();
+    ArrayList<String> exampleUrls = new ArrayList<>();
 
     private double INCREMENT_VALUE = 0.5;
     private double DURATION_INITIAL_VALUE = 1.0;
-    private List<String> urls = new ArrayList<>();
-    private List<String> apps = new ArrayList<>();
+    private ArrayList<String> urls = new ArrayList<>();
+    private ArrayList<App> apps = new ArrayList<>();
     private static int TIMEPICK_REQUEST_CODE = 10;
 
     OnControllingAdded onControllingAdded;
@@ -84,8 +82,8 @@ public class ControllingDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        urls.add("https://facebook.com");
-        urls.add("https://youtube.com");
+        exampleUrls.add("https://facebook.com");
+        exampleUrls.add("https://youtube.com");
     }
 
     @NonNull
@@ -97,9 +95,14 @@ public class ControllingDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Calendar calendar = Calendar.getInstance();
-                                Controlling controlling = new Controlling(titleEditText.getText().toString(),
-                                        urls.toArray(new String[0]),
-                                        apps.toArray(new String[0]),
+                                ArrayList<String> appPackageNames = new ArrayList<String>();
+                                for (int i = 0; i < apps.size(); ++i){
+                                    appPackageNames.add(apps.get(i).getPackageName());
+                                }
+                                Controlling controlling = new Controlling(
+                                        titleEditText.getText().toString(),
+                                        urls,
+                                        appPackageNames,
                                         internetCheckBox.isChecked(),
                                         Double.valueOf(durationEditText.getText().toString()),
                                         durationUnitSpinner.getSelectedItem().toString(),
@@ -157,23 +160,8 @@ public class ControllingDialogFragment extends DialogFragment {
                 timePickerDialogFragment.show(fm, getActivity().getString(R.string.pick_time));
             }
         });
-//        urlEditText = view.findViewById(R.id.url_edittext);
-//        existingUrlSpinner = view.findViewById(R.id.controlling_url_spinner);
-//        ArrayAdapter<String> urlAdapter = new ArrayAdapter<String>(getContext(),
-//                android.R.layout.simple_spinner_item, urls.toArray(new String[0]));
-//        existingUrlSpinner.setAdapter(urlAdapter);
-//        existingUrlSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                urlEditText.setText(existingUrlSpinner.getSelectedItem().toString());
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-        ArrayAdapter<String> urlAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.select_dialog_singlechoice, urls.toArray(new String[0]));
+
+        ArrayAdapter<String> urlAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.select_dialog_singlechoice, exampleUrls.toArray(new String[0]));
         urlTextView = view.findViewById(R.id.url_autotextview);
         urlTextView.setThreshold(1);
         urlTextView.setAdapter(urlAdapter);
@@ -193,7 +181,7 @@ public class ControllingDialogFragment extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 App app = (App)appSpinner.getSelectedItem();
-                apps.add(app.getLabel());
+                apps.add(app);
                 alreadyAddedList.add(app.getLabel());
                 alreadyAddedAdapter.notifyDataSetChanged();
             }
@@ -203,20 +191,14 @@ public class ControllingDialogFragment extends DialogFragment {
 
             }
         });
-//        addAppButton = view.findViewById(R.id.add_app_button);
-//        addAppButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                App app = (App)appSpinner.getSelectedItem();
-//                apps.add(app.getLabel());
-//                alreadyAddedList.add(app.getLabel());
-//                alreadyAddedAdapter.notifyDataSetChanged();
-//            }
-//        });
         internetCheckBox = view.findViewById(R.id.internet_checkbox);
         alreadyAddedListView = view.findViewById(R.id.new_controlling_listview);
         alreadyAddedList.addAll(urls);
-        alreadyAddedList.addAll(apps);
+        ArrayList<String> appLabels = new ArrayList<String>();
+        for (int i = 0; i < apps.size(); ++i){
+            appLabels.add(apps.get(i).getLabel());
+        }
+        alreadyAddedList.addAll(appLabels);
         alreadyAddedAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, alreadyAddedList);
         alreadyAddedListView.setAdapter(alreadyAddedAdapter);
 

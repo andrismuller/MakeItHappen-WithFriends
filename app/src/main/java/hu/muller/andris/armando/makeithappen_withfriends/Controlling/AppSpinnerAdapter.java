@@ -62,8 +62,9 @@ public class AppSpinnerAdapter extends BaseAdapter {
             PackageInfo p = packs.get(i);
 //            if ((isSystemPackage(p) == false)) {
                 String appName = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
+                String appPackageName = p.applicationInfo.packageName;
                 Drawable icon = p.applicationInfo.loadIcon(context.getPackageManager());
-                apps.add(new App(appName, icon));
+                apps.add(new App(appName, appPackageName, icon));
 //            }
         }
     }

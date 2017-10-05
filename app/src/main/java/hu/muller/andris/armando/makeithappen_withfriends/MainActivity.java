@@ -22,6 +22,7 @@ import hu.muller.andris.armando.makeithappen_withfriends.Alarm.AlarmFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingFragment;
+import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingRecyclerViewAdapter;
 import hu.muller.andris.armando.makeithappen_withfriends.Note.NoteFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.NewTodoDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.TodoFragment;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
 //      ,TimePickerDialogFragment.OnTimePicked
         , ControllingFragment.OnNewControllingListener
         , ControllingDialogFragment.OnControllingAdded
+        , ControllingRecyclerViewAdapter.OnControllingStartedListener
     {
 
     private SectionPagerAdapter mSectionPagerAdapter;
@@ -142,14 +144,10 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
         }
     }
 
-//    @Override
-//    public void onTimePicked(long time) {
-//        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-//        if (page instanceof TodoFragment){
-//            TodoFragment todoFragment = (TodoFragment) page;
-//            todoFragment.update();
-//        }
-//    }
+        @Override
+        public void onControllingStarted(Controlling controlling) {
+
+        }
 
     private class SectionPagerAdapter extends FragmentPagerAdapter {
 

@@ -2,11 +2,9 @@ package hu.muller.andris.armando.makeithappen_withfriends.Controlling;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +20,7 @@ public class ControllingFragment extends Fragment {
 
     private TextView infoTextView;
     private FloatingActionButton addControllingFab;
-    private RecyclerView controllingRescyclerView;
+    private RecyclerView controllingRecyclerView;
     private ControllingRecyclerViewAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -53,11 +51,11 @@ public class ControllingFragment extends Fragment {
                 onNewControllingListener.onNewControlling();
             }
         });
-        controllingRescyclerView = view.findViewById(R.id.controlling_recyclerview);
+        controllingRecyclerView = view.findViewById(R.id.controlling_recyclerview);
         layoutManager = new LinearLayoutManager(getContext());
-        controllingRescyclerView.setLayoutManager(layoutManager);
+        controllingRecyclerView.setLayoutManager(layoutManager);
         adapter = new ControllingRecyclerViewAdapter(getContext());
-        controllingRescyclerView.setAdapter(adapter);
+        controllingRecyclerView.setAdapter(adapter);
 
         return view;
     }

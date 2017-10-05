@@ -37,9 +37,6 @@ public class NoteListAdapter extends BaseAdapter{
     public NoteListAdapter(Context context){
         this.context = context;
         inflater = (LayoutInflater.from(context));
-//        for (int i = 0; i < notes.size(); ++i){
-//            notes.get(i).delete();
-//        }
         try{
             notes = Note.listAll(Note.class);
         } catch (Exception e){
@@ -75,7 +72,6 @@ public class NoteListAdapter extends BaseAdapter{
         deleteNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Note note = Note.findById(Note.class, notes.get(i).getMyId());
                 notes.get(i).delete();
 
                 notes.remove(i);

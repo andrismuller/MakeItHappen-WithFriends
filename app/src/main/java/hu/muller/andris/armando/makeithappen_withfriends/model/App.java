@@ -2,18 +2,22 @@ package hu.muller.andris.armando.makeithappen_withfriends.model;
 
 import android.graphics.drawable.Drawable;
 
+import com.orm.SugarRecord;
+
 /**
  * Created by Muller Andras on 9/24/2017.
  */
 
-public class App {
+public class App extends SugarRecord {
     private String label;
+    private String packageName;
     private Drawable icon;
 
     public App(){}
 
-    public App(String label, Drawable icon){
+    public App(String label, String packageName, Drawable icon){
         this.label = label;
+        this.packageName = packageName;
         this.icon = icon;
     }
 
@@ -34,4 +38,11 @@ public class App {
     }
 
 
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
 }

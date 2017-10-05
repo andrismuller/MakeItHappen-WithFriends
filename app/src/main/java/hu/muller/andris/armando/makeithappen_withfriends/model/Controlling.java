@@ -3,14 +3,16 @@ package hu.muller.andris.armando.makeithappen_withfriends.model;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
+import java.util.ArrayList;
+
 /**
  * Created by Muller Andras on 9/23/2017.
  */
 
 public class Controlling extends SugarRecord {
     private String name;
-    private String[] urls;
-    private String[] apps;
+    private String urls;
+    private String apps;
     private boolean internet;
     private double durationValue;
     private String durationUnit;
@@ -20,10 +22,10 @@ public class Controlling extends SugarRecord {
     private long myId;
 
     public Controlling(){}
-    public Controlling(String name, String[] urls, String[] apps, boolean internet, double durationValue, String durationUnit, long startTime){
+    public Controlling(String name, ArrayList<String> urlsList, ArrayList<String> appsList, boolean internet, double durationValue, String durationUnit, long startTime){
         this.name = name;
-        this.urls = urls;
-        this.apps = apps;
+        this.setUrls(urlsList);
+        this.setApps(appsList);
         this.internet = internet;
         this.durationValue = durationValue;
         this.durationUnit = durationUnit;
@@ -47,20 +49,34 @@ public class Controlling extends SugarRecord {
         this.name = name;
     }
 
-    public String[] getUrls() {
+    public String getUrls() {
         return urls;
     }
 
-    public void setUrls(String[] urls) {
-        this.urls = urls;
+    public void setUrls(ArrayList<String> urlsList) {
+        String result = "";
+        if (urlsList != null){
+            for (int i = 0; i < urlsList.size(); ++i){
+                result = result.concat(urlsList.get(i));
+                result = result.concat(";");
+            }
+        }
+        this.urls = result;
     }
 
-    public String[] getApps() {
+    public String getApps() {
         return apps;
     }
 
-    public void setApps(String[] apps) {
-        this.apps = apps;
+    public void setApps(ArrayList<String> appsList) {
+        String result = "";
+        if (appsList != null){
+            for (int i = 0; i < appsList.size(); ++i){
+                result = result.concat(appsList.get(i));
+                result = result.concat(";");
+            }
+        }
+        this.apps = result;
     }
 
     public boolean isInternet() {
@@ -93,24 +109,6 @@ public class Controlling extends SugarRecord {
 
     public void setStartTime(long startTime) {
         this.startTime = startTime;
-    }
-
-    public String websitesToString(){
-        String result = "";
-        for (int i = 0; i < urls.length; ++i){
-            result.concat(urls[i]);
-            result.concat("\n");
-        }
-        return result;
-    }
-
-    public String appstoString(){
-        String result = "";
-        for (int i = 0; i < apps.length; ++i){
-            result.concat(apps[i]);
-            result.concat("\n");
-        }
-        return result;
     }
 
     public boolean isActivated() {
