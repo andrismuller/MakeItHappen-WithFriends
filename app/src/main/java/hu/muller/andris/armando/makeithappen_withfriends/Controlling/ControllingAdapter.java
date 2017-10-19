@@ -28,14 +28,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by Muller Andras on 9/23/2017.
  */
 
-public class ControllingRecyclerViewAdapter extends RecyclerView.Adapter<ControllingRecyclerViewAdapter.ViewHolder> {
-    private static final String TAG = "ControllingRecyclerViewAdapter";
+public class ControllingAdapter extends RecyclerView.Adapter<ControllingAdapter.ViewHolder> {
+    private static final String TAG = "ControllingAdapter";
 
     Context context;
     OnControllingStartedListener onControllingStartedListener;
     private List<Controlling> controllings = new ArrayList<>();
 
-    public ControllingRecyclerViewAdapter(Context context){
+    public ControllingAdapter(Context context){
         this.context = context;
         onControllingStartedListener = (OnControllingStartedListener) context;
         controllings = Controlling.listAll(Controlling.class);

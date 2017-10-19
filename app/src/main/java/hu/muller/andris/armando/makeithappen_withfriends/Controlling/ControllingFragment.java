@@ -21,7 +21,7 @@ public class ControllingFragment extends Fragment {
     private TextView infoTextView;
     private FloatingActionButton addControllingFab;
     private RecyclerView controllingRecyclerView;
-    private ControllingRecyclerViewAdapter adapter;
+    private ControllingAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     OnNewControllingListener onNewControllingListener;
@@ -54,7 +54,7 @@ public class ControllingFragment extends Fragment {
         controllingRecyclerView = view.findViewById(R.id.controlling_recyclerview);
         layoutManager = new LinearLayoutManager(getContext());
         controllingRecyclerView.setLayoutManager(layoutManager);
-        adapter = new ControllingRecyclerViewAdapter(getContext());
+        adapter = new ControllingAdapter(getContext());
         controllingRecyclerView.setAdapter(adapter);
 
         return view;

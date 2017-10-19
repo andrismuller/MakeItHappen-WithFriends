@@ -17,12 +17,14 @@ import android.view.MenuItem;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.AlarmFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingFragment;
-import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingRecyclerViewAdapter;
+import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingAdapter;
+import hu.muller.andris.armando.makeithappen_withfriends.Messaging.MessagingFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Note.NoteFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.NewTodoDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.TodoFragment;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
 //      ,TimePickerDialogFragment.OnTimePicked
         , ControllingFragment.OnNewControllingListener
         , ControllingDialogFragment.OnControllingAdded
-        , ControllingRecyclerViewAdapter.OnControllingStartedListener
+        , ControllingAdapter.OnControllingStartedListener
     {
 
     private SectionPagerAdapter mSectionPagerAdapter;
@@ -44,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+        LoginManager.getInstance().logOut();
 
         setContentView(R.layout.activity_main);
 
@@ -174,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
                 case 4:
                     return ControllingFragment.newInstance();
 
+                case 5:
+                    return new MessagingFragment();
+
                 default:
                     return MainFragment.newInstance();
             }
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
 
         @Override
         public int getCount() {
-            return 5;
+            return 6;
         }
 
         @Override
@@ -197,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
                     return getString(R.string.note_fragment_title);
                 case 4:
                     return getString(R.string.controlling_page_title);
+                case 5:
+                    return getString(R.string.friends_page_title);
             }
 
             return Resources.getSystem().getString(R.string.error);

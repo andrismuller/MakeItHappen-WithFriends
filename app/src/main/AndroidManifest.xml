@@ -71,7 +71,7 @@
             android:value="MakeItHappenSugar.db" />
         <meta-data
             android:name="VERSION"
-            android:value="8" />
+            android:value="3"></meta-data>
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -79,6 +79,18 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="hu.muller.andris.armando.makeithappen_withfriends" />
 
+        <service
+            android:name=".Firebase.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Firebase.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

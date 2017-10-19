@@ -1,9 +1,15 @@
 package hu.muller.andris.armando.makeithappen_withfriends;
 
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +21,29 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import hu.muller.andris.armando.makeithappen_withfriends.Weather.DownloadWeatherDataTask;
+import hu.muller.andris.armando.makeithappen_withfriends.model.FacebookUser;
 
 public class MainFragment extends Fragment implements DownloadWeatherDataTask.OnWeatherDataArrivedListener{
+    public static String IMAGE_DIR_PATH = "/data/user/0/hu.muller.andris.armando.makeithappen_withfriends/app_imageDir/";
 
     private static final String ARG_WEATHER = "weather";
     String[] weatherParcialData;
@@ -57,7 +75,7 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
         welcomeUserTextView = view.findViewById(R.id.welcome_user_textview);
         setFacebookProfileData();
         LoginButton loginButton = view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions("email", "user_friends");
         loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -90,7 +108,6 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
     public static Fragment newInstance() {
         MainFragment fragment = new MainFragment();
         return fragment;
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -108,15 +125,64 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
                                 GraphResponse response) {
                             try {
                                 welcomeUserTextView.setText(response.getJSONObject().get("name").toString());
+                                JSONArray jsonArrayFriends = null;
+                                jsonArrayFriends = object.getJSONObject("friends").getJSONArray("data");
+                                for (int i = 0; i < jsonArrayFriends.length(); ++i){
+                                    JSONObject friend = jsonArrayFriends.getJSONObject(i);
+                                    if (!existFriendInDatabase(friend.getString("name"))){
+                                        GetFacebookProfilePicture getPicture = new GetFacebookProfilePicture(friend.getString("id"));
+                                        getPicture.execute(new String[]{"https://graph.facebook.com/" + friend.getString("id") + "/picture?type=small"});
+                                        FacebookUser facebookUser = new FacebookUser(friend.getString("name"), friend.getString("id"));
+                                        facebookUser.setMyId(facebookUser.save());
+                                    }
+                                }
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                     });
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,link");
+            parameters.putString("fields", "id,name,link,friends");
             request.setParameters(parameters);
             request.executeAsync();
+        }
+    }
+
+    private class GetFacebookProfilePicture extends AsyncTask<String, Void, String> {
+        private String userId;
+
+        public GetFacebookProfilePicture(String userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            URL imageURL = null;
+            Bitmap bitmap = null;
+            String absolutPath = null;
+            try {
+                imageURL = new URL(urls[0]);
+                bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                IMAGE_DIR_PATH = saveToInternalStorage(bitmap,userId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return absolutPath;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {}
+    }
+
+    public boolean existFriendInDatabase(String name){
+        List<FacebookUser> facebookUsers = Select.from(FacebookUser.class)
+                .where(Condition.prop("user_name").eq(name))
+                .list();
+        if (facebookUsers != null && facebookUsers.size() > 0){
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -124,5 +190,26 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
     public void onWeatherDataArrived(HashMap<String, String> data) {
         placeTextView.setText(data.get("place"));
         tempTextView.setText(data.get("temperature"));
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage, String userId){
+        ContextWrapper cw = new ContextWrapper(getContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, userId + "_pic.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
     }
 }
