@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 
 import hu.muller.andris.armando.makeithappen_withfriends.R;
@@ -20,10 +24,10 @@ import hu.muller.andris.armando.makeithappen_withfriends.model.MyMessage;
 
 public class EarlierMessagesAdapter extends RecyclerView.Adapter<EarlierMessagesAdapter.ViewHolder> {
 
-    private List<MyMessage> messages;
+    private static List<MyMessage> messages;
 
     public EarlierMessagesAdapter(String fromID, String meID){
-        messages = MyMessage.find(MyMessage.class, "from_user = ? or to_user = ?", fromID, fromID);
+//        messages = MyMessage.find(MyMessage.class, "from_user = ? or to_user = ?", fromID, fromID);
     }
 
     @Override
@@ -49,6 +53,7 @@ public class EarlierMessagesAdapter extends RecyclerView.Adapter<EarlierMessages
 
     public void addMessage(MyMessage message) {
         messages.add(message);
+//        message.save();
         notifyDataSetChanged();
     }
 
@@ -60,4 +65,18 @@ public class EarlierMessagesAdapter extends RecyclerView.Adapter<EarlierMessages
             messageTextView = itemView.findViewById(R.id.message_textview);
         }
     }
+
+    public static ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            MyMessage message = dataSnapshot.getValue(MyMessage.class);
+            messages.add(message);
+//            message.save();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            System.out.println("The read failed: " + databaseError.getCode());
+        }
+    };
 }

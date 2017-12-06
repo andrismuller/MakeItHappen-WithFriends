@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context="hu.muller.andris.armando.makeithappen_withfriends.Messaging.SendMessageDialogFragment"
     android:orientation="vertical"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +35,8 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/earlier_messages_recyclerview"></android.support.v7.widget.RecyclerView>
+            android:id="@+id/earlier_messages_recyclerview"
+            ></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 

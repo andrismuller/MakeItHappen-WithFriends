@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:drawable/alert_light_frame"
+    android:padding="15dp">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/todo_checkbox"/>
+        android:id="@+id/todo_checkbox"
+        android:layout_centerVertical="true"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/todo_checkbox">
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,13 +40,13 @@
         android:layout_height="match_parent"
         android:src="@android:drawable/ic_menu_edit"
         android:id="@+id/todoItem_edit_imgButton"
-        android:layout_gravity="center_vertical|end"/>
+        android:layout_toLeftOf="@id/todoItem_delete_imgButton"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:src="@android:drawable/ic_delete"
         android:id="@+id/todoItem_delete_imgButton"
-        android:layout_gravity="center_vertical|end"/>
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+</RelativeLayout>

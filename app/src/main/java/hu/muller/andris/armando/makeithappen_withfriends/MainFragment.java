@@ -4,16 +4,20 @@ package hu.muller.andris.armando.makeithappen_withfriends;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -22,9 +26,17 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
@@ -44,12 +56,15 @@ import hu.muller.andris.armando.makeithappen_withfriends.model.FacebookUser;
 
 public class MainFragment extends Fragment implements DownloadWeatherDataTask.OnWeatherDataArrivedListener{
     public static String IMAGE_DIR_PATH = "/data/user/0/hu.muller.andris.armando.makeithappen_withfriends/app_imageDir/";
+    public static String meID;
 
     private static final String ARG_WEATHER = "weather";
     String[] weatherParcialData;
     TextView placeTextView;
     TextView tempTextView;
     TextView welcomeUserTextView;
+
+    private FirebaseAuth mAuth;
 
     String exampleUrl = "http://api.openweathermap.org/data/2.5/weather?q=Budapest&appid=1358e65404bbf025e405a5f58ded63ec";
 
@@ -59,6 +74,18 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        // Todo: update UI
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +102,7 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
         welcomeUserTextView = view.findViewById(R.id.welcome_user_textview);
         setFacebookProfileData();
         LoginButton loginButton = view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "user_friends");
+        loginButton.setReadPermissions("email", "user_friends", "public_profile");
         loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -125,6 +152,15 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
                                 GraphResponse response) {
                             try {
                                 welcomeUserTextView.setText(response.getJSONObject().get("name").toString());
+
+                                SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PREFS_NAME, 0);
+                                SharedPreferences.Editor editor = settings.edit();
+                                meID = response.getJSONObject().get("id").toString();
+                                editor.putString("me", meID);
+
+                                // Commit the edits!
+                                editor.commit();
+
                                 JSONArray jsonArrayFriends = null;
                                 jsonArrayFriends = object.getJSONObject("friends").getJSONArray("data");
                                 for (int i = 0; i < jsonArrayFriends.length(); ++i){
@@ -146,6 +182,30 @@ public class MainFragment extends Fragment implements DownloadWeatherDataTask.On
             parameters.putString("fields", "id,name,link,friends");
             request.setParameters(parameters);
             request.executeAsync();
+        }
+
+        if (AccessToken.getCurrentAccessToken() != null) {
+            AuthCredential credential = FacebookAuthProvider.getCredential(AccessToken.getCurrentAccessToken().getToken());
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("FirebaseLogin", "signInWithCredential:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                // TODO: update ui
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w("FirebaseLogin", "signInWithCredential:failure", task.getException());
+                                Toast.makeText(getContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                //updateUI(null);
+                            }
+
+                            // ...
+                        }
+                    });
         }
     }
 

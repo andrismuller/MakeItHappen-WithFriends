@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/new_controlling_action_button"
             android:src="@android:drawable/ic_input_add"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"/>
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

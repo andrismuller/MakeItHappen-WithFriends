@@ -85,7 +85,7 @@ public class AlarmsListAdapter extends BaseAdapter {
 
     private String getDate(long milliSeconds)
     {
-        String dateFormat = "yyyy.mm.dd. hh:mm";
+        String dateFormat = "yyyy.MM.dd. hh:mm";
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
 
         Calendar calendar = Calendar.getInstance();

@@ -11,38 +11,56 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.AlarmFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Alarm.SetAlarmDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Controlling.ControllingAdapter;
+import hu.muller.andris.armando.makeithappen_withfriends.Messaging.EarlierMessagesAdapter;
+import hu.muller.andris.armando.makeithappen_withfriends.Messaging.MessagesAdapter;
 import hu.muller.andris.armando.makeithappen_withfriends.Messaging.MessagingFragment;
+import hu.muller.andris.armando.makeithappen_withfriends.Messaging.SendMessageDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Note.NoteFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.NewTodoDialogFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.Todo.TodoFragment;
 import hu.muller.andris.armando.makeithappen_withfriends.model.Controlling;
+import hu.muller.andris.armando.makeithappen_withfriends.model.FacebookUser;
+import hu.muller.andris.armando.makeithappen_withfriends.model.MyMessage;
 
 public class MainActivity extends AppCompatActivity implements AlarmFragment.OnNewAlarmListener,
         SetAlarmDialogFragment.OnAlarmAddedListener,
         TodoFragment.OnNewTodoListener, NewTodoDialogFragment.OnTodoAddedListener
-//      ,TimePickerDialogFragment.OnTimePicked
         , ControllingFragment.OnNewControllingListener
         , ControllingDialogFragment.OnControllingAdded
         , ControllingAdapter.OnControllingStartedListener
     {
 
+    private static final String TAG = "Main";
     private SectionPagerAdapter mSectionPagerAdapter;
     private ViewPager mViewPager;
+    private String fbToken;
+    private DatabaseReference mDatabaseReference;
 
-    @Override
+    public static final String PREFS_NAME = "MyPrefsFile";
+    private MessagesAdapter messagesAdapter;
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -51,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
         LoginManager.getInstance().logOut();
 
         setContentView(R.layout.activity_main);
+
+        fbToken = FirebaseInstanceId.getInstance().getToken();
+        Log.e(TAG, fbToken);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+
+//        messagesAdapter = new MessagesAdapter(options);
     }
 
     @Override
@@ -209,4 +233,9 @@ public class MainActivity extends AppCompatActivity implements AlarmFragment.OnN
             return Resources.getSystem().getString(R.string.error);
         }
     }
-}
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+        }
+    }

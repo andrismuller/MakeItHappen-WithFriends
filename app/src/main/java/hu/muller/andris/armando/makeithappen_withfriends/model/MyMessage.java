@@ -1,16 +1,19 @@
 package hu.muller.andris.armando.makeithappen_withfriends.model;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 /**
  * Created by Muller Andras on 10/18/2017.
  */
 
-public class MyMessage extends SugarRecord {
+public class MyMessage /* extends SugarRecord */ {
     private String message;
     private long datetime;
     private String fromUser;
     private String toUser;
+    @Ignore
+    private String myId;
 
     public MyMessage() {
     }
@@ -52,5 +55,13 @@ public class MyMessage extends SugarRecord {
 
     public void setToUser(String toUser) {
         this.toUser = toUser;
+    }
+
+    public String getMyId() {
+        return myId;
+    }
+
+    public void setMyId(String myId) {
+        this.myId = myId;
     }
 }

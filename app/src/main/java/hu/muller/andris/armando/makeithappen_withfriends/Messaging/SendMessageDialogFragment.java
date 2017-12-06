@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,6 +43,7 @@ public class SendMessageDialogFragment extends DialogFragment {
 
     private String userID;
     private String name;
+    private DatabaseReference mFirebaseDatabaseReference;
 
     public void setUserID(String userID) {
         this.userID = userID;
@@ -46,17 +55,48 @@ public class SendMessageDialogFragment extends DialogFragment {
 
     RecyclerView messagesRecyclerView;
     RecyclerView.LayoutManager layoutManager;
-    EarlierMessagesAdapter messagesAdapter;
+//    EarlierMessagesAdapter messagesAdapter;
+    public static MessagesAdapter messagesAdapter;
     EditText sendMessageEdittext;
     ImageButton sendMessageButton;
     TextView nameTextView;
     ImageView profileImageView;
     ImageButton backButton;
 
+    public static final String MESSAGES_CHILD = "messages";
+
+    DatabaseReference messagesRef;
+
+    SnapshotParser<MyMessage> parser;
+
+    FirebaseRecyclerOptions<MyMessage> options;
+
+
     public SendMessageDialogFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        messagesRef = mFirebaseDatabaseReference.child(MESSAGES_CHILD);
+
+        parser = new SnapshotParser<MyMessage>() {
+            @Override
+            public MyMessage parseSnapshot(DataSnapshot dataSnapshot) {
+                MyMessage friendlyMessage = dataSnapshot.getValue(MyMessage.class);
+                if (friendlyMessage != null) {
+                    friendlyMessage.setMyId(dataSnapshot.getKey());
+                }
+                return friendlyMessage;
+            }
+        };
+
+        options = new FirebaseRecyclerOptions.Builder<MyMessage>()
+                .setQuery(messagesRef, parser)
+                .build();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +104,9 @@ public class SendMessageDialogFragment extends DialogFragment {
         messagesRecyclerView = view.findViewById(R.id.earlier_messages_recyclerview);
         layoutManager = new LinearLayoutManager(getContext());
         messagesRecyclerView.setLayoutManager(layoutManager);
-        messagesAdapter = new EarlierMessagesAdapter(userID, "me");
+//        messagesAdapter = new EarlierMessagesAdapter(userID, "me");
+        messagesAdapter = new MessagesAdapter(options);
+        messagesAdapter.startListening();
         messagesRecyclerView.setAdapter(messagesAdapter);
         sendMessageEdittext = view.findViewById(R.id.send_message_edittext);
         sendMessageButton = view.findViewById(R.id.send_message_button);
@@ -72,10 +114,11 @@ public class SendMessageDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 MyMessage message = new MyMessage(sendMessageEdittext.getText().toString(), Calendar.getInstance().getTimeInMillis(),"me",userID);
-                message.save();
-                messagesAdapter.addMessage(message);
+//                message.save();
+//                messagesAdapter.addMessage(message);
+                mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
                 sendMessageEdittext.setText("");
-                //TODO: send to firebase
+                //mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);
             }
         });
         profileImageView = view.findViewById(R.id.send_message_friend_imageview);
@@ -105,4 +148,9 @@ public class SendMessageDialogFragment extends DialogFragment {
         return b;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        messagesAdapter.startListening();
+    }
 }
